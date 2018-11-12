@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Prime;
 
 namespace BiscaNet.Desktop.Data
 {
@@ -19,6 +20,24 @@ namespace BiscaNet.Desktop.Data
 			{
 				throw new ArgumentOutOfRangeException("num", "num must be a valid number for a spanish deck");
 			}
+		}
+
+		public static CardInfo[] GenerateDeck()
+		{
+			var res = new CardInfo[40];
+			int index = 0;
+
+			foreach (var i in CardInfo.Numbers)
+			{
+				res[index] = new CardInfo(Suit.Bastos, i);
+				res[index + 1] = new CardInfo(Suit.Copas, i);
+				res[index + 2] = new CardInfo(Suit.Espadas, i);
+				res[index + 3] = new CardInfo(Suit.Oros, i);
+
+				index += 4;
+			}
+
+			return res.OrderBy((c) => Randomic.Rand()).ToArray();
 		}
 	}
 

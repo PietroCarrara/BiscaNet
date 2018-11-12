@@ -48,6 +48,7 @@
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Entities\Card.cs" />
     <Compile Include="Data\CardInfo.cs" />
+    <Compile Include="Systems\GameManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -112,6 +113,7 @@
     <Folder Include="Scenes\" />
     <Folder Include="Entities\" />
     <Folder Include="Data\" />
+    <Folder Include="Systems\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Prime\Prime\Prime.csproj">

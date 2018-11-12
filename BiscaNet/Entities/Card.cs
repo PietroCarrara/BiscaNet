@@ -9,6 +9,7 @@ namespace BiscaNet.Desktop.Entities
 {
 	public class Card : Entity
 	{
+		public const float Width = 100, Height = Width * 1.5f;
 
 		public readonly CardInfo Info;
 
@@ -27,8 +28,8 @@ namespace BiscaNet.Desktop.Entities
 						"Sprites/cards/fronts/" + this.Info.Suit.Name() + "_" + this.Info.Number)));
 
 
-			spr.Width = 100;
-			spr.Height = spr.Width * 1.5f;
+			spr.Width = Width;
+			spr.Height = Height;
 		}
 	}
 }
