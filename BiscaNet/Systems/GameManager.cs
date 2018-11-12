@@ -36,7 +36,7 @@ namespace BiscaNet.Desktop.Systems
 			{
 				if (Input.IsButtonPressed(MouseButtons.Left) && deckColl.CollidesWith(Input.MousePosition(game.Cam)))
 				{
-					game.AddToTable(deck.Dequeue());
+					game.AddToHand(deck.Dequeue());
 
 					if (!deck.Any())
 					{
@@ -44,7 +44,6 @@ namespace BiscaNet.Desktop.Systems
 					}
 				}
 			}
-
 		}
 	}
 }

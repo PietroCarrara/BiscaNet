@@ -39,6 +39,16 @@ namespace BiscaNet.Desktop.Data
 
 			return res.OrderBy((c) => Randomic.Rand()).ToArray();
 		}
+
+		public static bool operator ==(CardInfo a, CardInfo b)
+		{
+			return a.Number == b.Number && a.Suit == b.Suit;
+		}
+
+		public static bool operator !=(CardInfo a, CardInfo b)
+		{
+			return !(a == b);
+		}
 	}
 
 	public enum Suit
@@ -67,6 +77,5 @@ namespace BiscaNet.Desktop.Data
 
 			throw new ArgumentOutOfRangeException("Suit s", "s is not in the enum interval");
 		}
-
 	}
 }
