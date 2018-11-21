@@ -30,6 +30,8 @@ namespace BiscaNet.Desktop.Entities
 
 			spr.Width = Width;
 			spr.Height = Height;
+
+			this.Add(new RectangleCollider(Card.Width, Card.Height));
 		}
 	}
 }

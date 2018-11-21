@@ -22,6 +22,13 @@ namespace BiscaNet.Desktop.Data
 			}
 		}
 
+		// Value in points
+		public int Value(bool isJokerSuit = false)
+		{
+			if (isJokerSuit) return this.Number + Numbers.Last();
+			return this.Number;
+		}
+
 		public static CardInfo[] GenerateDeck()
 		{
 			var res = new CardInfo[40];
@@ -40,9 +47,14 @@ namespace BiscaNet.Desktop.Data
 			return res.OrderBy((c) => Randomic.Rand()).ToArray();
 		}
 
+		public bool Equals(CardInfo b)
+		{
+			return this.Number == b.Number && this.Suit == b.Suit;
+		}
+
 		public static bool operator ==(CardInfo a, CardInfo b)
 		{
-			return a.Number == b.Number && a.Suit == b.Suit;
+			return a.Equals(b);
 		}
 
 		public static bool operator !=(CardInfo a, CardInfo b)

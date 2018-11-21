@@ -49,6 +49,9 @@
     <Compile Include="Entities\Card.cs" />
     <Compile Include="Data\CardInfo.cs" />
     <Compile Include="Systems\GameManager.cs" />
+    <Compile Include="Data\IPlayer.cs" />
+    <Compile Include="Data\Player.cs" />
+    <Compile Include="Systems\ManagedPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
