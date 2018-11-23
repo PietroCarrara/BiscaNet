@@ -42,7 +42,7 @@ namespace BiscaNet.Desktop.Data
 		{
 			for (int i = 0; i < onHand.Count; i++)
 			{
-				var coll = onHand[i].GetComponent<RectangleCollider>();
+				var coll = onHand[i].Hitbox;
 
 				if (Input.IsButtonPressed(MouseButtons.Left) && coll.CollidesWith(Input.MousePosition(this.game.Cam)))
 				{
@@ -59,9 +59,9 @@ namespace BiscaNet.Desktop.Data
 			{
 				var c = onHand[i];
 
-				c.Position.X = PrimeGame.Center.X * 2 / 3 + (Card.Width) * i;
+				c.Position.X = PrimeGame.Center.X + (Card.Width) * (i - 1);
 
-				var coll = c.GetComponent<RectangleCollider>();
+				var coll = c.Hitbox;
 
 				// The hover effect
 				if (coll.CollidesWith(Input.MousePosition(game.Cam)))

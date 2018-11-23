@@ -27,6 +27,8 @@ namespace BiscaNet.Desktop.Systems
 		private static List<ManagedPlayer> players;
 		private static int currentPlayer;
 
+		private static float elapsedTime = 0;
+
 		public static void Init(GameScene g)
 		{
 			game = g;
@@ -51,6 +53,7 @@ namespace BiscaNet.Desktop.Systems
 			players.Add(new ManagedPlayer(p));
 		}
 
+
 		public static void Update()
 		{
 			switch (state)
@@ -63,13 +66,6 @@ namespace BiscaNet.Desktop.Systems
 						for (int i = 0; i < 3; i++)
 							player.AddCard(deck.Dequeue());
 					}
-
-					// Testing all the zones
-					for (int i = 0; i < 4; i++)
-					{
-						game.SetZone(i, deck.Dequeue());
-					}
-
 					break;
 				case GameState.Playing:
 					var p = players[currentPlayer];
@@ -83,23 +79,19 @@ namespace BiscaNet.Desktop.Systems
 						if (++currentPlayer >= players.Count)
 						{
 							currentPlayer = 0;
+							state = GameState.Waiting;
 						}
 					}
-
 					break;
-			}
+				case GameState.Waiting:
+					elapsedTime += Time.DetlaTime;
 
-			if (deck.Any())
-			{
-				if (Input.IsButtonPressed(MouseButtons.Left) && deckColl.CollidesWith(Input.MousePosition(game.Cam)))
-				{
-					players[0].AddCard(deck.Dequeue());
-
-					if (!deck.Any())
+					if (elapsedTime > 3)
 					{
-						game.DestroyDeck();
+						elapsedTime = 0;
+						state = GameState.Distrubution;
 					}
-				}
+					break;
 			}
 		}
 	}
@@ -109,6 +101,9 @@ namespace BiscaNet.Desktop.Systems
 		// First step, where the cards are given out
 		Distrubution,
 		// Everyone is puting their cards in the table
-		Playing
+		Playing,
+		// Waiting just so the players can understand what
+		// cards have been played
+		Waiting
 	}
 }

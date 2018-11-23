@@ -52,6 +52,7 @@
     <Compile Include="Data\IPlayer.cs" />
     <Compile Include="Data\Player.cs" />
     <Compile Include="Systems\ManagedPlayer.cs" />
+    <Compile Include="Data\LocalEnemyPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

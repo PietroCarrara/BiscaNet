@@ -29,7 +29,7 @@ namespace BiscaNet.Desktop.Scenes
 
 				this.Add(joker);
 
-				joker.GetComponent<Sprite>().Rotation = MathHelper.PiOver2;
+				joker.Rotation = MathHelper.PiOver2;
 				joker.Position = PrimeGame.Center;
 			}
 		}
@@ -40,24 +40,27 @@ namespace BiscaNet.Desktop.Scenes
 		private Vector2[] zonePositions =
 		{
 			PrimeGame.Center + new Vector2(0, 150),
+			PrimeGame.Center + new Vector2(400, 0),
 			PrimeGame.Center + new Vector2(0, -200),
 			PrimeGame.Center + new Vector2(-400, 0),
-			PrimeGame.Center + new Vector2(400, 0),
 		};
+
 		private float[] zoneRotations =
 		{
 			0,
-			0,
-			MathHelper.PiOver2,
+			MathHelper.PiOver2 + MathHelper.Pi,
+			MathHelper.Pi,
 			MathHelper.PiOver2,
 		};
+
 		public void SetZone(int zone, CardInfo c)
 		{
 			if (cardsOnTable[zone] != null) cardsOnTable[zone].Destroy();
 
 			cardsOnTable[zone] = this.Add(new Card(c));
+			cardsOnTable[zone].DrawOrder = -1;
 			cardsOnTable[zone].Position = zonePositions[zone];
-			cardsOnTable[zone].GetComponent<Sprite>().Rotation = zoneRotations[zone];
+			cardsOnTable[zone].Rotation = zoneRotations[zone];
 		}
 
 		public override void Initialize()
@@ -69,11 +72,15 @@ namespace BiscaNet.Desktop.Scenes
 			GameManager.Init(this);
 
 			GameManager.AddPlayer(You);
+			GameManager.AddPlayer(this.Add(new LocalEnemyPlayer(new Vector2(1280 - Card.Height / 3, 0), MathHelper.PiOver2 + MathHelper.Pi)));
+			GameManager.AddPlayer(this.Add(new LocalEnemyPlayer(new Vector2(0, 0 - Card.Height / 3), 0)));
+			GameManager.AddPlayer(this.Add(new LocalEnemyPlayer(new Vector2(0 + Card.Height / 3, 0), MathHelper.PiOver2)));
 
 			this.AddUI(new Label("Tabela de pontuação:\n 5: 10 pontos\n12: 4 pontos\n11: 3 pontos\n10: 2 pontos", AnchorPoint.BottomLeft));
 
 			var bg = this.Add(new Entity());
 			bg.Add(new Sprite(this.Content.Load<Texture2D>("Sprites/bg/table-top")));
+			bg.DrawOrder = -10;
 
 			// Setup face-down deck
 			this.Add(DeckEntity);

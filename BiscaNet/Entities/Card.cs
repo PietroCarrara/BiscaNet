@@ -13,6 +13,22 @@ namespace BiscaNet.Desktop.Entities
 
 		public readonly CardInfo Info;
 
+		public readonly RectangleCollider Hitbox = new RectangleCollider(Card.Width, Card.Height);
+
+		public Sprite Sprite { get; private set; }
+
+		private float rotation;
+		public float Rotation
+		{
+			get => rotation;
+			set
+			{
+				rotation = value;
+
+				this.Sprite.Rotation = rotation;
+			}
+		}
+
 		public Card(CardInfo i)
 		{
 			this.Info = i;
@@ -22,16 +38,16 @@ namespace BiscaNet.Desktop.Entities
 		{
 			base.Initialize();
 
-			var spr = this.Add(
+			this.Sprite = this.Add(
 				new Sprite(
 					this.Scene.Content.Load<Texture2D>(
 						"Sprites/cards/fronts/" + this.Info.Suit.Name() + "_" + this.Info.Number)));
 
 
-			spr.Width = Width;
-			spr.Height = Height;
+			Sprite.Width = Width;
+			Sprite.Height = Height;
 
-			this.Add(new RectangleCollider(Card.Width, Card.Height));
+			this.Add(Hitbox);
 		}
 	}
 }
