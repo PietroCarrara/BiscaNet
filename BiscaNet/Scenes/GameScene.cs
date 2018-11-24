@@ -14,7 +14,27 @@ namespace BiscaNet.Desktop.Scenes
 {
 	public class GameScene : Scene
 	{
-		public readonly Entity DeckEntity = new Entity();
+		// TODO: Remove
+		public readonly Entity WinningIndicator = new Entity();
+
+		private Label label;
+
+		private string message;
+		public string Message
+		{
+			get
+			{
+				return message;
+			}
+			set
+			{
+				message = value;
+
+				label.Text = message + "\nTabela de pontuação:\n 5: 10 pontos\n12: 4 pontos\n11: 3 pontos\n10: 2 pontos";
+			}
+		}
+
+		public int StartingPlayer = 0;
 
 		private Player You;
 
@@ -61,6 +81,30 @@ namespace BiscaNet.Desktop.Scenes
 			cardsOnTable[zone].DrawOrder = -1;
 			cardsOnTable[zone].Position = zonePositions[zone];
 			cardsOnTable[zone].Rotation = zoneRotations[zone];
+
+			Card bestCard = null;
+			int bestIndex = 0;
+			for (int i = 0; i < cardsOnTable.Length; i++)
+			{
+				if (bestCard == null)
+				{
+					bestCard = cardsOnTable[i];
+					bestIndex = i;
+					continue;
+				}
+				else if (cardsOnTable[i] == null)
+				{
+					continue;
+				}
+				else if (cardsOnTable[i].Info.GreaterThan(bestCard.Info, Joker.Suit))
+				{
+					bestCard = cardsOnTable[i];
+					bestIndex = i;
+				}
+			}
+
+			WinningIndicator.Position = (PrimeGame.Center + zonePositions[bestIndex]) / 2;
+			WinningIndicator.GetComponent<Sprite>().IsVisible = true;
 		}
 
 		public void ClearZones()
@@ -73,6 +117,8 @@ namespace BiscaNet.Desktop.Scenes
 					cardsOnTable[i] = null;
 				}
 			}
+
+			WinningIndicator.GetComponent<Sprite>().IsVisible = false;
 		}
 
 		public override void Initialize()
@@ -88,18 +134,20 @@ namespace BiscaNet.Desktop.Scenes
 			GameManager.AddPlayer(this.Add(new LocalEnemyPlayer(new Vector2(0, 0 - Card.Height / 3), 0, 2)));
 			GameManager.AddPlayer(this.Add(new LocalEnemyPlayer(new Vector2(0 + Card.Height / 3, 0), MathHelper.PiOver2, 3)));
 
-			this.AddUI(new Label("Tabela de pontuação:\n 5: 10 pontos\n12: 4 pontos\n11: 3 pontos\n10: 2 pontos", AnchorPoint.BottomLeft));
+			this.label = this.AddUI(new Label("", AnchorPoint.BottomLeft));
+			this.Message = "Oloko";
 
 			var bg = this.Add(new Entity());
 			bg.Add(new Sprite(this.Content.Load<Texture2D>("Sprites/bg/table-top")));
 			bg.DrawOrder = -10;
 
 			// Setup face-down deck
-			this.Add(DeckEntity);
-			DeckEntity.Position = PrimeGame.Center + new Vector2(200, 0);
-			var deckSpr = DeckEntity.Add(new Sprite(Content.Load<Texture2D>("Sprites/cards/card-back")));
-			deckSpr.Width = Card.Width;
-			deckSpr.Height = Card.Height;
+			WinningIndicator.DrawOrder = 1;
+			this.Add(WinningIndicator);
+			var deckSpr = WinningIndicator.Add(new Sprite(Content.Load<Texture2D>("Sprites/icons/crown")));
+			deckSpr.Width = 50;
+			deckSpr.Height = 50;
+			deckSpr.IsVisible = false;
 		}
 
 		public override void Update()
@@ -107,12 +155,6 @@ namespace BiscaNet.Desktop.Scenes
 			base.Update();
 
 			GameManager.Update();
-		}
-
-		// TODO: Maybe remove?
-		public void DestroyDeck()
-		{
-			DeckEntity.Destroy();
 		}
 	}
 }

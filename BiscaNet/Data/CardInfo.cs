@@ -22,6 +22,7 @@ namespace BiscaNet.Desktop.Data
 			}
 		}
 
+
 		// values[n-1] = value of card n
 		private static int[] values = { 0, 0, 0, 0, 10, 0, 0, 0, 0, 2, 3, 4, 0 };
 		public int Points

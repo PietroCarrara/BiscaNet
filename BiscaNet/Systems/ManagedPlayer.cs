@@ -1,6 +1,7 @@
 ﻿using System;
 using BiscaNet.Desktop.Data;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BiscaNet.Desktop.Systems
 {
@@ -13,6 +14,14 @@ namespace BiscaNet.Desktop.Systems
 		public readonly IPlayer Player;
 
 		public List<CardInfo> OnHand = new List<CardInfo>();
+
+		// The cards a player gets by winning a round
+		public List<CardInfo> OnStack = new List<CardInfo>();
+
+		public int Points
+		{
+			get => OnStack.Sum((c) => c.Points);
+		}
 
 		public CardInfo? OnTable;
 

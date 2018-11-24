@@ -18,13 +18,12 @@ namespace BiscaNet.Desktop.Systems
 
 		private static Queue<CardInfo> deck;
 
-		public static List<CardInfo> OnTable { get; private set; }
-		public static List<CardInfo> OnHand { get; private set; }
-
 		private static List<ManagedPlayer> players;
 		private static int currentPlayer;
 
-		private static float elapsedTime = 0;
+		private static float elapsedTime;
+
+		private static int startingPlayer;
 
 		public static void Init(GameScene g)
 		{
@@ -32,13 +31,14 @@ namespace BiscaNet.Desktop.Systems
 
 			deck = new Queue<CardInfo>(CardInfo.GenerateDeck());
 
-			OnTable = new List<CardInfo>();
-			OnHand = new List<CardInfo>();
-
 			state = GameState.Initializing;
 
 			players = new List<ManagedPlayer>();
 			currentPlayer = 0;
+
+			startingPlayer = 0;
+
+			elapsedTime = 0;
 		}
 
 		public static void AddPlayer(IPlayer p)
@@ -49,6 +49,8 @@ namespace BiscaNet.Desktop.Systems
 
 		public static void Update()
 		{
+			string msg;
+
 			switch (state)
 			{
 				case GameState.Initializing:
@@ -65,10 +67,39 @@ namespace BiscaNet.Desktop.Systems
 					state = GameState.Distrubution;
 					break;
 				case GameState.Distrubution:
+
+					int playerIndex = 0;
+					if (deck.Count < players.Count)
+					{
+						msg = players[0].Player.HandCount() + " rodadas restantes!\n";
+					}
+					else
+					{
+						msg = (deck.Count / players.Count) + 2 + " rodadas restantes!\n";
+					}
+					foreach (var player in players)
+					{
+						if (currentPlayer == playerIndex)
+						{
+							msg += "-> ";
+						}
+						playerIndex++;
+
+						msg += player.Player.GetName() + ": " + player.Points + " pontos\n";
+					}
+					game.Message = msg;
+
+					// No more cards to play
+					if (players[0].Player.HandCount() <= 0)
+					{
+						state = GameState.Over;
+						break;
+					}
+
 					// We need at least 1 card for each player
 					if (deck.Count < players.Count)
 					{
-						state = GameState.Over;
+						state = GameState.Playing;
 						break;
 					}
 
@@ -82,11 +113,12 @@ namespace BiscaNet.Desktop.Systems
 				case GameState.Playing:
 					var p = players[currentPlayer];
 					var cardId = p.Player.PlayCard();
+
 					if (cardId >= 0)
 					{
 						var c = p.PopCard(cardId);
 
-						game.SetZone(currentPlayer, c);
+						game.SetZone((currentPlayer + startingPlayer) % players.Count, c);
 
 						if (++currentPlayer >= players.Count)
 						{
@@ -108,14 +140,31 @@ namespace BiscaNet.Desktop.Systems
 				case GameState.Evaluating:
 					var bestCard = players[0].OnTable.Value;
 					var bestPlayer = players[0];
+					int bestIndex = 0;
+					int counter = 1;
 					foreach (var player in players.Skip(1))
 					{
 						if (player.OnTable.Value.GreaterThan(bestCard, game.Joker.Suit))
 						{
 							bestCard = player.OnTable.Value;
 							bestPlayer = player;
+							bestIndex = counter;
 						}
+						counter++;
 					}
+
+					foreach (var player in players)
+					{
+						bestPlayer.OnStack.Add(player.OnTable.Value);
+						player.OnTable = null;
+					}
+
+					startingPlayer += bestIndex;
+					startingPlayer = startingPlayer % players.Count;
+
+					var newOrder = players.GetRange(bestIndex, players.Count - bestIndex);
+					newOrder.AddRange(players.GetRange(0, bestIndex));
+					players = newOrder;
 
 					Console.WriteLine("The best player is " + bestPlayer.Player.GetName());
 
