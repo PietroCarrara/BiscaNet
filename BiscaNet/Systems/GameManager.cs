@@ -92,7 +92,7 @@ namespace BiscaNet.Desktop.Systems
 					// No more cards to play
 					if (players[0].Player.HandCount() <= 0)
 					{
-						state = GameState.Over;
+						state = GameState.EvaluateWinner;
 						break;
 					}
 
@@ -170,6 +170,29 @@ namespace BiscaNet.Desktop.Systems
 
 					state = GameState.Distrubution;
 					break;
+				case GameState.EvaluateWinner:
+					players = players.OrderByDescending((c) => c.Points).ToList();
+
+					msg = "Ranking:\n";
+					int rank = 1;
+					foreach (var player in players)
+					{
+						msg += rank + "º: " + player.Player.GetName() + " -> " + player.Points + " pontos\n";
+						rank++;
+					}
+
+					game.SetHeader(msg);
+					elapsedTime = 0;
+					state = GameState.Over;
+					break;
+				case GameState.Over:
+					elapsedTime += Time.DetlaTime;
+					if (elapsedTime > 3)
+					{
+						game.End();
+						state = GameState.None;
+					}
+					break;
 			}
 		}
 	}
@@ -182,12 +205,15 @@ namespace BiscaNet.Desktop.Systems
 		Distrubution,
 		// Everyone is puting their cards in the table
 		Playing,
-		// Waiting just so the players can understand what
-		// cards have been played
+		// Waiting just so the players can understand what cards have been played
 		Waiting,
 		// Calculating who won the round
 		Evaluating,
+		// Calculating who won the game
+		EvaluateWinner,
 		// The game has ended
-		Over
+		Over,
+		// We can fully stop doing any checks, the game has totally ended
+		None
 	}
 }

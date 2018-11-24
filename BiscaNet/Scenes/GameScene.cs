@@ -139,6 +139,20 @@ namespace BiscaNet.Desktop.Scenes
 			WinningIndicator.GetComponent<Sprite>().IsVisible = false;
 		}
 
+		public void End()
+		{
+			this.Destroy();
+			this.Game.ActiveScene = new MenuScene();
+		}
+
+		private Label header;
+		public void SetHeader(string msg)
+		{
+			if (header == null) header = this.AddUI(new Label("", AnchorPoint.TopCenter));
+
+			header.Text = msg;
+		}
+
 		public override void Initialize()
 		{
 			base.Initialize();
