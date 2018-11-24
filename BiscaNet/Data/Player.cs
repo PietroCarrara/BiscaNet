@@ -23,7 +23,7 @@ namespace BiscaNet.Desktop.Data
 
 		public string GetName()
 		{
-			return "You";
+			return PlayerData.GetInstance().Name;
 		}
 
 		public void AddCard(CardInfo info)

@@ -9,7 +9,7 @@ namespace BiscaNet.Desktop
 {
 	public class BiscaGame : PrimeGame
 	{
-		public BiscaGame() : base(new GameScene())
+		public BiscaGame() : base(new MenuScene())
 		{
 
 		}
