@@ -84,7 +84,25 @@ namespace BiscaNet.Desktop.Scenes
 
 			Card bestCard = null;
 			int bestIndex = 0;
-			for (int i = 0; i < cardsOnTable.Length; i++)
+			for (int i = 0; i < StartingPlayer; i++)
+			{
+				if (bestCard == null)
+				{
+					bestCard = cardsOnTable[i];
+					bestIndex = i;
+					continue;
+				}
+				else if (cardsOnTable[i] == null)
+				{
+					continue;
+				}
+				else if (cardsOnTable[i].Info.GreaterThan(bestCard.Info, Joker.Suit))
+				{
+					bestCard = cardsOnTable[i];
+					bestIndex = i;
+				}
+			}
+			for (int i = StartingPlayer; i < cardsOnTable.Length; i++)
 			{
 				if (bestCard == null)
 				{
