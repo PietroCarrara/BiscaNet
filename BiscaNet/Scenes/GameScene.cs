@@ -19,13 +19,13 @@ namespace BiscaNet.Desktop.Scenes
 		private Player You;
 
 		private Card joker;
-		public Card Joker
+		public CardInfo Joker
 		{
-			get => joker;
+			get => joker.Info;
 			set
 			{
 				if (joker != null) joker.Destroy();
-				joker = value;
+				joker = new Card(value);
 
 				this.Add(joker);
 
@@ -63,6 +63,18 @@ namespace BiscaNet.Desktop.Scenes
 			cardsOnTable[zone].Rotation = zoneRotations[zone];
 		}
 
+		public void ClearZones()
+		{
+			for (int i = 0; i < cardsOnTable.Length; i++)
+			{
+				if (cardsOnTable[i] != null)
+				{
+					cardsOnTable[i].Destroy();
+					cardsOnTable[i] = null;
+				}
+			}
+		}
+
 		public override void Initialize()
 		{
 			base.Initialize();
@@ -72,9 +84,9 @@ namespace BiscaNet.Desktop.Scenes
 			GameManager.Init(this);
 
 			GameManager.AddPlayer(You);
-			GameManager.AddPlayer(this.Add(new LocalEnemyPlayer(new Vector2(1280 - Card.Height / 3, 0), MathHelper.PiOver2 + MathHelper.Pi)));
-			GameManager.AddPlayer(this.Add(new LocalEnemyPlayer(new Vector2(0, 0 - Card.Height / 3), 0)));
-			GameManager.AddPlayer(this.Add(new LocalEnemyPlayer(new Vector2(0 + Card.Height / 3, 0), MathHelper.PiOver2)));
+			GameManager.AddPlayer(this.Add(new LocalEnemyPlayer(new Vector2(1280 - Card.Height / 3, 0), MathHelper.PiOver2 + MathHelper.Pi, 1)));
+			GameManager.AddPlayer(this.Add(new LocalEnemyPlayer(new Vector2(0, 0 - Card.Height / 3), 0, 2)));
+			GameManager.AddPlayer(this.Add(new LocalEnemyPlayer(new Vector2(0 + Card.Height / 3, 0), MathHelper.PiOver2, 3)));
 
 			this.AddUI(new Label("Tabela de pontuação:\n 5: 10 pontos\n12: 4 pontos\n11: 3 pontos\n10: 2 pontos", AnchorPoint.BottomLeft));
 

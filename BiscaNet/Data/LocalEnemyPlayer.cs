@@ -15,17 +15,26 @@ namespace BiscaNet.Desktop.Data
 		// true is going up
 		private bool isUp;
 
+		private int index;
+
 		private readonly float rotation;
 
-		public LocalEnemyPlayer(Vector2 position, float rotation)
+		public LocalEnemyPlayer(Vector2 position, float rotation, int index)
 		{
 			this.Position = position;
 			this.rotation = rotation;
+
+			this.index = index;
 
 			if (this.rotation > 0)
 			{
 				isUp = true;
 			}
+		}
+
+		public string GetName()
+		{
+			return "Enemy " + this.index;
 		}
 
 		public void AddCard(CardInfo info)

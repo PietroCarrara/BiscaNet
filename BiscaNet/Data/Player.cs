@@ -21,6 +21,11 @@ namespace BiscaNet.Desktop.Data
 			this.game = s;
 		}
 
+		public string GetName()
+		{
+			return "You";
+		}
+
 		public void AddCard(CardInfo info)
 		{
 			// Add card to scene and hand

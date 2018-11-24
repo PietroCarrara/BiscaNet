@@ -22,11 +22,14 @@ namespace BiscaNet.Desktop.Data
 			}
 		}
 
-		// Value in points
-		public int Value(bool isJokerSuit = false)
+		// values[n-1] = value of card n
+		private static int[] values = { 0, 0, 0, 0, 10, 0, 0, 0, 0, 2, 3, 4, 0 };
+		public int Points
 		{
-			if (isJokerSuit) return this.Number + Numbers.Last();
-			return this.Number;
+			get
+			{
+				return values[this.Number - 1];
+			}
 		}
 
 		public static CardInfo[] GenerateDeck()
@@ -44,7 +47,47 @@ namespace BiscaNet.Desktop.Data
 				index += 4;
 			}
 
+			// Shuffle
 			return res.OrderBy((c) => Randomic.Rand()).ToArray();
+		}
+
+		// Returns true if this wins out against the b card,
+		// taking note of the joker suit
+		public bool GreaterThan(CardInfo b, Suit joker)
+		{
+			if (this == b)
+			{
+				throw new ArgumentException("Can't check values against two equal cards!");
+			}
+
+			if (this.Suit == b.Suit)
+			{
+				// Both cards are worth 0 points,
+				// use their number for points
+				if (this.Points == b.Points)
+				{
+					return this.Number > b.Number;
+				}
+				else
+				{
+					return this.Points > b.Points;
+				}
+			}
+
+			// See if someone is the joker
+			if (this.Suit == joker) return true;
+			if (b.Suit == joker) return false;
+
+			// Last resource: different suits, and
+			// no joker in play
+			if (this.Points == b.Points)
+			{
+				return this.Number > b.Number;
+			}
+			else
+			{
+				return this.Points > b.Points;
+			}
 		}
 
 		public bool Equals(CardInfo b)

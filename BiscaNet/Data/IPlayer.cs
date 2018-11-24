@@ -19,5 +19,8 @@ namespace BiscaNet.Desktop.Data
 
 		// Removes the card from the hand at given index
 		void RemoveAt(int idx);
+
+		// The player's name
+		string GetName();
 	}
 }
