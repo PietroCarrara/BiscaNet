@@ -17,6 +17,8 @@ namespace BiscaNet.Desktop.Entities
 
 		public Sprite Sprite { get; private set; }
 
+		private bool isFaceDown;
+
 		private float rotation;
 		public float Rotation
 		{
@@ -29,6 +31,12 @@ namespace BiscaNet.Desktop.Entities
 			}
 		}
 
+		// Create a face down card
+		public Card()
+		{
+			this.isFaceDown = true;
+		}
+
 		public Card(CardInfo i)
 		{
 			this.Info = i;
@@ -38,10 +46,17 @@ namespace BiscaNet.Desktop.Entities
 		{
 			base.Initialize();
 
-			this.Sprite = this.Add(
-				new Sprite(
-					this.Scene.Content.Load<Texture2D>(
-						"Sprites/cards/fronts/" + this.Info.Suit.Name() + "_" + this.Info.Number)));
+			if (this.isFaceDown)
+			{
+				this.Sprite = this.Add(new Sprite(this.Scene.Content.Load<Texture2D>("Sprites/cards/card-back")));
+			}
+			else
+			{
+				this.Sprite = this.Add(
+					new Sprite(
+						this.Scene.Content.Load<Texture2D>(
+							"Sprites/cards/fronts/" + this.Info.Suit.Name() + "_" + this.Info.Number)));
+			}
 
 
 			Sprite.Width = Width;

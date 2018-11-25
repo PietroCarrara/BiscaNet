@@ -15,12 +15,22 @@ namespace BiscaNet.Desktop.Data
 		void Update();
 
 		// Adds a card to the hand
-		void AddCard(CardInfo info);
+		void AddCard(CardInfo? info);
 
 		// Removes the card from the hand at given index
 		void RemoveAt(int idx);
 
 		// The player's name
 		string GetName();
+		void SetName(string name);
+
+		// The player's position in the initial queue (who plays first)
+		int GetID();
+
+		// Where should this player drop his card?
+		int GetZone();
+
+		// Sets if its your turn
+		void SetTurn(bool isYou);
 	}
 }

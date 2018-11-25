@@ -55,6 +55,14 @@
     <Compile Include="Data\LocalEnemyPlayer.cs" />
     <Compile Include="Data\PlayerData.cs" />
     <Compile Include="Scenes\MenuScene.cs" />
+    <Compile Include="Scenes\ConnectionScene.cs" />
+    <Compile Include="Networking\Client\BiscaClient.cs" />
+    <Compile Include="Networking\Server\BiscaConnection.cs" />
+    <Compile Include="Networking\Server\BiscaServer.cs" />
+    <Compile Include="Networking\Protocol\Message.cs" />
+    <Compile Include="Systems\GameSync.cs" />
+    <Compile Include="Scenes\ServerConfigScene.cs" />
+    <Compile Include="Scenes\ConnectionConfigScene.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -62,6 +70,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
@@ -114,12 +125,17 @@
       <Link>MonoGame.Framework.dll.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Scenes\" />
     <Folder Include="Entities\" />
     <Folder Include="Data\" />
     <Folder Include="Systems\" />
+    <Folder Include="Networking\" />
+    <Folder Include="Networking\Client\" />
+    <Folder Include="Networking\Server\" />
+    <Folder Include="Networking\Protocol\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Prime\Prime\Prime.csproj">

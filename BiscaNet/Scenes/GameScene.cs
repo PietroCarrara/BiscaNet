@@ -9,6 +9,7 @@ using BiscaNet.Desktop.Systems;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using BiscaNet.Desktop.Networking.Client;
 
 namespace BiscaNet.Desktop.Scenes
 {
@@ -17,7 +18,11 @@ namespace BiscaNet.Desktop.Scenes
 		// TODO: Remove
 		public readonly Entity WinningIndicator = new Entity();
 
+		public List<IPlayer> Players = new List<IPlayer>();
+
 		private Label label;
+
+		private BiscaClient client;
 
 		private string message;
 		public string Message
@@ -52,6 +57,14 @@ namespace BiscaNet.Desktop.Scenes
 				joker.Rotation = MathHelper.PiOver2;
 				joker.Position = PrimeGame.Center;
 			}
+		}
+
+		public GameScene(BiscaClient cli)
+		{
+			this.client = cli;
+
+			You = new Player(this, cli);
+			Players.Add(You);
 		}
 
 		// Maximum of 4 players, so only 4 cards will be at the table
@@ -141,7 +154,7 @@ namespace BiscaNet.Desktop.Scenes
 
 		public void End()
 		{
-			this.Destroy();
+			// this.Destroy();
 			this.Game.ActiveScene = new MenuScene();
 		}
 
@@ -157,14 +170,16 @@ namespace BiscaNet.Desktop.Scenes
 		{
 			base.Initialize();
 
-			this.You = this.Add(new Player(this));
-
 			GameManager.Init(this);
 
-			GameManager.AddPlayer(You);
-			GameManager.AddPlayer(this.Add(new LocalEnemyPlayer(new Vector2(1280 - Card.Height / 3, 0), MathHelper.PiOver2 + MathHelper.Pi, 1)));
-			GameManager.AddPlayer(this.Add(new LocalEnemyPlayer(new Vector2(0, 0 - Card.Height / 3), 0, 2)));
-			GameManager.AddPlayer(this.Add(new LocalEnemyPlayer(new Vector2(0 + Card.Height / 3, 0), MathHelper.PiOver2, 3)));
+			foreach (var player in Players)
+			{
+				if (player is Entity e)
+				{
+					this.Add(e);
+				}
+				GameManager.AddPlayer(player);
+			}
 
 			this.label = this.AddUI(new Label("", AnchorPoint.BottomLeft));
 			this.Message = "Oloko";
@@ -184,6 +199,8 @@ namespace BiscaNet.Desktop.Scenes
 
 		public override void Update()
 		{
+			GameSync.Update();
+
 			base.Update();
 
 			GameManager.Update();

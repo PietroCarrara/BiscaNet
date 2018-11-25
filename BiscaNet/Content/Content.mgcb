@@ -5280,3 +5280,15 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/icons/crown.png
 
+#begin Audio/Effects/receive_turn.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Effects/receive_turn.wav
+
+#begin Audio/Effects/play_now.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Effects/play_now.wav
+

@@ -13,5 +13,6 @@ namespace BiscaNet.Desktop.Data
 		}
 
 		public string Name;
+		public int Index;
 	}
 }

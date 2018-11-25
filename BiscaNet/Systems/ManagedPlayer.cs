@@ -2,6 +2,7 @@
 using BiscaNet.Desktop.Data;
 using System.Collections.Generic;
 using System.Linq;
+using BiscaNet.Desktop.Networking.Server;
 
 namespace BiscaNet.Desktop.Systems
 {
@@ -23,6 +24,16 @@ namespace BiscaNet.Desktop.Systems
 			get => OnStack.Sum((c) => c.Points);
 		}
 
+		public BiscaConnection Connection
+		{
+			get => GameManager.Server.Connections.Find(c => c.GetID() == Player.GetID());
+		}
+
+		public int HandCount()
+		{
+			return OnHand.Count;
+		}
+
 		public CardInfo? OnTable;
 
 		public ManagedPlayer(IPlayer p)
@@ -33,7 +44,7 @@ namespace BiscaNet.Desktop.Systems
 		public void AddCard(CardInfo c)
 		{
 			OnHand.Add(c);
-			Player.AddCard(c);
+			Connection.AddCard(c);
 		}
 
 		public CardInfo PopCard(int idx)
@@ -41,10 +52,9 @@ namespace BiscaNet.Desktop.Systems
 			var c = OnHand[idx];
 			OnHand.RemoveAt(idx);
 
-			Player.RemoveAt(idx);
+			Connection.RemoveAt(idx);
 
 			this.OnTable = c;
-
 			return c;
 		}
 	}
