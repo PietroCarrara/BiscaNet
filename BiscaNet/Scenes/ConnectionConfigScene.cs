@@ -16,6 +16,7 @@ namespace BiscaNet.Desktop.Scenes
 			panel.AddChild(new Header("Configuração de conexão"));
 
 			var txt = new TextInput(false);
+			txt.PlaceholderText = "localhost";
 
 			panel.AddChild(new Label("Endereço de ip do host:"));
 			panel.AddChild(txt);
@@ -23,6 +24,8 @@ namespace BiscaNet.Desktop.Scenes
 			var bt = new Button("Jogar!");
 			bt.OnClick = () =>
 			{
+				if (txt.Value == "") txt.Value = "127.0.0.1";
+
 				this.Game.ActiveScene = new ConnectionScene(txt.Value);
 			};
 

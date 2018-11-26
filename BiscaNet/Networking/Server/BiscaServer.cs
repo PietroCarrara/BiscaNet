@@ -167,9 +167,11 @@ namespace BiscaNet.Desktop.Networking.Server
 				sock.SetIndex(Connections.Count);
 
 				// Alert everyone of a new player
+				int index = 0;
 				foreach (var c in Connections)
 				{
-					c.AddPlayer(Connections.Count, Connections.Count);
+					c.AddPlayer(Connections.Count - index, Connections.Count);
+					index++;
 				}
 
 				this.Connections.Add(sock);
@@ -188,14 +190,20 @@ namespace BiscaNet.Desktop.Networking.Server
 
 					// The first second player is missing 1 enemy, the third two...
 					// Add remaining players
-					int index = 0;
+					int idx = 0;
 					foreach (var c in Connections)
 					{
-						for (int i = 0; i < index; i++)
+						// index = 2;
+						// i = 1;
+						// 4 - 2 + 1
+						// 2 + 1
+						// 3
+
+						for (int i = 0; i < idx; i++)
 						{
-							c.AddPlayer((4 - index + i) % 4, i);
+							c.AddPlayer((4 - idx + i) % 4, i);
 						}
-						index++;
+						idx++;
 					}
 
 					// Send the configs

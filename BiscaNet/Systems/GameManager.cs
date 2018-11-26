@@ -79,27 +79,6 @@ namespace BiscaNet.Desktop.Systems
 					state = GameState.Distrubution;
 					break;
 				case GameState.Distrubution:
-					if (deck.Count < Players.Count)
-					{
-						msg = Players[0].HandCount() + " rodadas restantes!\n";
-					}
-					else
-					{
-						msg = (deck.Count / Players.Count) + 2 + " rodadas restantes!\n";
-					}
-					int index = 0;
-					foreach (var player in Players)
-					{
-						if (index == currentPlayer)
-						{
-							msg += "-> ";
-						}
-						index++;
-
-						msg += player.Player.GetName() + ": " + player.Points + " pontos\n";
-					}
-					Server.Message = msg;
-
 					// No more cards to play
 					if (Players[0].HandCount() <= 0)
 					{
@@ -125,6 +104,28 @@ namespace BiscaNet.Desktop.Systems
 
 					break;
 				case GameState.Playing:
+					// Points message
+					if (deck.Count < Players.Count)
+					{
+						msg = Players[0].HandCount() + " rodadas restantes!\n";
+					}
+					else
+					{
+						msg = (deck.Count / Players.Count) + 2 + " rodadas restantes!\n";
+					}
+					int index = 0;
+					foreach (var player in Players)
+					{
+						if (index == currentPlayer)
+						{
+							msg += "-> ";
+						}
+						index++;
+
+						msg += player.Player.GetName() + ": " + player.Points + " pontos\n";
+					}
+					Server.Message = msg;
+
 					var p = Players[currentPlayer];
 					var cardId = p.Connection.PlayCard();
 
