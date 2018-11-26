@@ -26,7 +26,7 @@ namespace BiscaNet.Desktop.Scenes
 			{
 				if (txt.Value == "") txt.Value = "127.0.0.1";
 
-				this.Game.ActiveScene = new ConnectionScene(txt.Value);
+				this.Game.ActiveScene = new ConnectionScene(txt.Value, this);
 			};
 
 			panel.AddChild(bt);

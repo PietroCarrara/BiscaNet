@@ -45,6 +45,8 @@ namespace BiscaNet.Desktop.Scenes
 
 		public int StartingPlayer = 0;
 
+		private Scene parent;
+
 		private Player You;
 
 		private Card joker;
@@ -63,9 +65,11 @@ namespace BiscaNet.Desktop.Scenes
 			}
 		}
 
-		public GameScene(BiscaClient cli)
+		public GameScene(BiscaClient cli, Scene parent)
 		{
 			this.client = cli;
+
+			this.parent = parent;
 
 			You = new Player(this, cli);
 			Players.Add(You);
@@ -163,8 +167,7 @@ namespace BiscaNet.Desktop.Scenes
 
 		public void End()
 		{
-			// this.Destroy();
-			this.Game.ActiveScene = new MenuScene();
+			this.Game.ActiveScene = this.parent;
 		}
 
 		private Label header;

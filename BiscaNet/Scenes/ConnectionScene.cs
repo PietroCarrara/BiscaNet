@@ -12,21 +12,26 @@ namespace BiscaNet.Desktop.Scenes
 
 		private GameScene game;
 
+		protected Label Label;
+
+		private Scene parent;
+
 		private string addr;
 
-		public ConnectionScene(string addr)
+		public ConnectionScene(string addr, Scene parent)
 		{
 			this.addr = addr;
+			this.parent = parent;
 		}
 
 		public override void Initialize()
 		{
 			base.Initialize();
 
-			this.AddUI(new Label("Conectando ao servidor...", AnchorPoint.Center));
+			this.Label = this.AddUI(new Label("Conectando ao servidor...", AnchorPoint.Center));
 
 			this.client = new BiscaClient(addr, Values.GamePort);
-			this.game = new GameScene(client);
+			this.game = new GameScene(client, this.parent);
 			this.client.Game = game;
 
 			this.client.Start();

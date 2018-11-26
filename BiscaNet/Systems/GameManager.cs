@@ -150,7 +150,7 @@ namespace BiscaNet.Desktop.Systems
 				case GameState.Waiting:
 					elapsedTime += Time.DetlaTime;
 
-					if (elapsedTime > 1)
+					if (elapsedTime > 2)
 					{
 						elapsedTime = 0;
 						state = GameState.Evaluating;

@@ -20,15 +20,14 @@ namespace BiscaNet.Desktop.Scenes
 			var txt = new TextInput(false);
 			txt.PlaceholderText = "Número de jogadores (máx. 4)";
 
-			string ipAddress = "undefined";
+			string ipAddress = "";
 
 			var host = Dns.GetHostEntry(Dns.GetHostName());
 			foreach (var ip in host.AddressList)
 			{
 				if (ip.AddressFamily == AddressFamily.InterNetwork || ip.AddressFamily == AddressFamily.InterNetworkV6)
 				{
-					ipAddress = ip.ToString();
-					break;
+					ipAddress += "\n" + ip.ToString();
 				}
 			}
 
@@ -43,7 +42,7 @@ namespace BiscaNet.Desktop.Scenes
 				var server = new BiscaServer(numPlayers);
 				server.Start();
 
-				this.Game.ActiveScene = new ConnectionScene("127.0.0.1");
+				this.Game.ActiveScene = new HostConnectionScene("127.0.0.1", this, ipAddress);
 			};
 
 			panel.AddChild(txt);

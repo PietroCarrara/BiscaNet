@@ -10,8 +10,8 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:../../packages/GeonBit.UI.3.2.0/lib/geonbitui/DataTypes.dll
 /reference:../../packages/MonoGame.Extended.Content.Pipeline.1.1.0/tools/MonoGame.Extended.Content.Pipeline.dll
+/reference:../../packages/GeonBit.UI.3.1.0.5/lib/geonbitui/DataTypes.dll
 
 #---------------------------------- Content ---------------------------------#
 
