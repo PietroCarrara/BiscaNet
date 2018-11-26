@@ -2,6 +2,7 @@
 using Prime;
 using Prime.UI;
 using BiscaNet.Desktop.Networking.Client;
+using BiscaNet.Desktop.Networking.Protocol;
 
 namespace BiscaNet.Desktop.Scenes
 {
@@ -24,7 +25,7 @@ namespace BiscaNet.Desktop.Scenes
 
 			this.AddUI(new Label("Conectando ao servidor...", AnchorPoint.Center));
 
-			this.client = new BiscaClient(addr, 3032);
+			this.client = new BiscaClient(addr, Values.GamePort);
 			this.game = new GameScene(client);
 			this.client.Game = game;
 

@@ -38,9 +38,9 @@ namespace BiscaNet.Desktop.Scenes
 				int numPlayers = 0;
 				int.TryParse(txt.Value, out numPlayers);
 
-				if (numPlayers <= 0 || numPlayers > 4) return;
+				if (numPlayers <= 1 || numPlayers > 4) return;
 
-				var server = new BiscaServer(2);
+				var server = new BiscaServer(numPlayers);
 				server.Start();
 
 				this.Game.ActiveScene = new ConnectionScene("127.0.0.1");

@@ -66,6 +66,13 @@ namespace BiscaNet.Desktop.Networking.Client
 			conn.Send(msg.ToBytes());
 		}
 
+		public void SendChat(string text)
+		{
+			var msg = new Message<string>("SendChat", text);
+
+			conn.Send(msg.ToBytes());
+		}
+
 		private void watch()
 		{
 			while (this.Running)
@@ -129,6 +136,9 @@ namespace BiscaNet.Desktop.Networking.Client
 						case "End":
 							GameSync.Defer(() => Game.End());
 							end();
+							break;
+						case "ReceiveChat":
+							GameSync.Defer(() => Game.AddChat(Convert.ToString(msg.Payload)));
 							break;
 					}
 				}

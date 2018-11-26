@@ -43,5 +43,7 @@ namespace BiscaNet.Desktop.Networking.Protocol
 	{
 		// Length in bytes of the message
 		public const int MessageLength = 2048;
+
+		public const int GamePort = 3032;
 	}
 }

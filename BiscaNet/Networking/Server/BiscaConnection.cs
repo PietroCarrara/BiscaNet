@@ -93,6 +93,9 @@ namespace BiscaNet.Desktop.Networking.Server
 						case "PlayCard":
 							playedCard = Convert.ToInt32(msg.Payload);
 							break;
+						case "SendChat":
+							parent.SendChat(this.GetName(), Convert.ToString(msg.Payload));
+							break;
 					}
 				}
 			}
@@ -104,6 +107,13 @@ namespace BiscaNet.Desktop.Networking.Server
 			var res = playedCard;
 			playedCard = -1;
 			return res;
+		}
+
+		public void ReceiveChat(string text)
+		{
+			var msg = new Message<string>("ReceiveChat", text);
+
+			conn.Send(msg.ToBytes());
 		}
 
 		public void SetMessage(string msg)

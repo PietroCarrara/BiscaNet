@@ -17,8 +17,6 @@ namespace BiscaNet.Desktop.Networking.Server
 		// Number of players in the game
 		private int numPlayers;
 
-		private const int SockPort = 3032;
-
 		public List<BiscaConnection> Connections = new List<BiscaConnection>();
 
 		private Socket conn;
@@ -70,7 +68,7 @@ namespace BiscaNet.Desktop.Networking.Server
 			GameManager.Server = this;
 
 			conn = new Socket(SocketType.Stream, ProtocolType.Tcp);
-			conn.Bind(new IPEndPoint(IPAddress.Any, SockPort));
+			conn.Bind(new IPEndPoint(IPAddress.Any, Values.GamePort));
 			conn.Listen(6);
 
 			Task.Run(() =>
@@ -140,6 +138,14 @@ namespace BiscaNet.Desktop.Networking.Server
 			foreach (var co in Connections)
 			{
 				co.GiveTurnTo(id);
+			}
+		}
+
+		public void SendChat(string player, string message)
+		{
+			foreach (var co in Connections)
+			{
+				co.ReceiveChat(player + ": " + message);
 			}
 		}
 
