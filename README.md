@@ -2,6 +2,8 @@
 
 Jogo Da Bisca em MonoGame (Prime)
 
+![Bisca](pics/jogo.png)
+
 ## Como Jogar
 
 Na bisca, há sempre um coringa em jogo (é a carta no meio do campo). Cartas que tenham o mesmo naipe do coringa vencem sempre.
@@ -31,3 +33,5 @@ Para verificar qual das cartas jogadas é a melhor, faz-se a seguinte comparaç�
 5. Se o número ou o valor empatarem, vence quem jogou a primeira carta
 
 Durante a sua vez, também é possível trocar o coringa. Se tiveres uma carta com o mesmo número do coringa, clique com o botão direito para adicionar o coringa em sua mão e definir o novo coringa.
+
+Para baixar o jogo, acesse a página de [releases](https://github.com/PietroCarrara/BiscaNet/releases)
