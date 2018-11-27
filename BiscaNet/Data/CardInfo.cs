@@ -63,7 +63,7 @@ namespace BiscaNet.Desktop.Data
 
 		// Returns true if this wins out against the b card,
 		// taking note of the joker suit
-		public bool GreaterThan(CardInfo b, Suit joker)
+		public bool GreaterThan(CardInfo b, Suit? joker)
 		{
 			if (this == b)
 			{
@@ -85,8 +85,11 @@ namespace BiscaNet.Desktop.Data
 			}
 
 			// See if someone is the joker
-			if (this.Suit == joker) return true;
-			if (b.Suit == joker) return false;
+			if (joker.HasValue)
+			{
+				if (this.Suit == joker) return true;
+				if (b.Suit == joker) return false;
+			}
 
 			// Last resource: different suits, and
 			// no joker in play

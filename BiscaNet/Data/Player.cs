@@ -43,6 +43,10 @@ namespace BiscaNet.Desktop.Data
 			{
 				receiveTurn.Play();
 			}
+			else
+			{
+				client.PlayCard(-1);
+			}
 		}
 		public void SetName(string name)
 		{
@@ -98,6 +102,10 @@ namespace BiscaNet.Desktop.Data
 					{
 						client.PlayCard(i);
 						break;
+					}
+					else if (Input.IsButtonPressed(MouseButtons.Right) && coll.CollidesWith(Input.MousePosition(this.game.Cam)))
+					{
+						client.PlayCard(i + 3);
 					}
 				}
 			}

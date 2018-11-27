@@ -12,18 +12,9 @@ namespace BiscaNet.Desktop.Scenes
 			this.ip = ip;
 		}
 
-
-		public override void Initialize()
+		protected override string GetText()
 		{
-			base.Initialize();
-
-			this.Label.Text += "\nSeu ip é:\n" + ip;
-		}
-
-		public override void Update()
-		{
-			base.Update();
-
+			return base.GetText() + "\nSeu ip é:\n" + ip;
 		}
 	}
 }

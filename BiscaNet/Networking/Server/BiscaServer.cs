@@ -149,8 +149,19 @@ namespace BiscaNet.Desktop.Networking.Server
 			}
 		}
 
+		public void SetStartingPlayer(int player)
+		{
+			foreach (var co in Connections)
+			{
+				co.SetStartingPlayer(player);
+			}
+		}
+
 		public void End()
 		{
+			GameManager.ShouldRun = false;
+			GameManager.Server = null;
+
 			foreach (var co in Connections)
 			{
 				co.End();

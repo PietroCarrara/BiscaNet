@@ -71,6 +71,13 @@ namespace BiscaNet.Desktop.Networking.Server
 			conn.Send(msg.ToBytes());
 		}
 
+		public void SetStartingPlayer(int player)
+		{
+			var msg = new Message<int>("SetStartingPlayer", player);
+
+			conn.Send(msg.ToBytes());
+		}
+
 		private void listen()
 		{
 			while (parent.Running)

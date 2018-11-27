@@ -8,6 +8,13 @@ namespace BiscaNet.Desktop.Scenes
 {
 	public class ConnectionConfigScene : Scene
 	{
+		private Scene parent;
+
+		public ConnectionConfigScene(Scene parent)
+		{
+			this.parent = parent;
+		}
+
 		public override void Initialize()
 		{
 			base.Initialize();
@@ -26,10 +33,19 @@ namespace BiscaNet.Desktop.Scenes
 			{
 				if (txt.Value == "") txt.Value = "127.0.0.1";
 
-				this.Game.ActiveScene = new ConnectionScene(txt.Value, this);
+				var scene = new ConnectionScene(txt.Value, this);
+				if (scene.Initialized)
+				{
+					scene.Prepare();
+				}
+				this.Game.ActiveScene = scene;
 			};
 
 			panel.AddChild(bt);
+			this.AddUI(new Button("<-", AnchorPoint.TopLeft, new Vector2(150, 50))).OnClick = () =>
+			{
+				this.Game.ActiveScene = this.parent;
+			};
 		}
 	}
 }

@@ -1,24 +1,34 @@
 ﻿using System;
-using BiscaNet.Desktop.Scenes;
-using System.Net.Sockets;
-using System.Net;
-using System.Threading.Tasks;
-using System.Text;
-using BiscaNet.Desktop.Networking.Protocol;
-using BiscaNet.Desktop.Data;
-using System.Linq;
 using System.Diagnostics;
-using BiscaNet.Desktop.Systems;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using BiscaNet.Desktop.Data;
+using BiscaNet.Desktop.Networking.Protocol;
+using BiscaNet.Desktop.Scenes;
+using BiscaNet.Desktop.Systems;
 
 namespace BiscaNet.Desktop.Networking.Client
 {
 	public class BiscaClient
 	{
+		public bool HasError { get; private set; }
+
 		public GameScene Game;
 
 		private string address;
 		private int port;
+
+		public int NumberOfPlayers
+		{
+			get
+			{
+				if (this.GameReady) return Game.Players.Count;
+
+				return PlayerData.GetInstance().Index + this.Game.Players.Count;
+			}
+		}
 
 		private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
@@ -40,21 +50,26 @@ namespace BiscaNet.Desktop.Networking.Client
 		{
 			conn = new Socket(SocketType.Stream, ProtocolType.Tcp);
 			conn.ReceiveBufferSize = Protocol.Values.MessageLength * 128;
+
 			Task.Run(() =>
 			{
 				Console.WriteLine("BiscaClient: Connecting to " + this.address + ":" + this.port);
-				conn.Connect(address, port);
 				try
 				{
+					conn.Connect(address, port);
+
 					sendInfo();
 					watch();
 					Debug.WriteLine("BiscaClient: Client stopped.");
 				}
+				catch (SocketException e)
+				{
+					Debug.WriteLine("BiscaClient: Error while runnig: " + e.Message);
+					this.HasError = true;
+				}
 				catch (Exception e)
 				{
-					Console.WriteLine("BiscaClient: Error while runnig: " + e.Message);
-					Console.WriteLine("Closing connection...");
-					// TODO: Close connection
+					Debug.WriteLine("BiscaClient: Error while runnig: " + e.Message);
 				}
 			}, cancellationTokenSource.Token);
 		}
@@ -139,6 +154,10 @@ namespace BiscaNet.Desktop.Networking.Client
 							break;
 						case "ReceiveChat":
 							GameSync.Defer(() => Game.AddChat(Convert.ToString(msg.Payload)));
+							break;
+						case "SetStartingPlayer":
+							int start = Convert.ToInt32(msg.Payload);
+							GameSync.Defer(() => Game.StartingPlayer = start);
 							break;
 					}
 				}

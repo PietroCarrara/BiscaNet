@@ -10,6 +10,12 @@ namespace BiscaNet.Desktop.Scenes
 {
 	public class ServerConfigScene : Scene
 	{
+		private Scene parent;
+		public ServerConfigScene(Scene parent)
+		{
+			this.parent = parent;
+		}
+
 		public override void Initialize()
 		{
 			base.Initialize();
@@ -42,7 +48,13 @@ namespace BiscaNet.Desktop.Scenes
 				var server = new BiscaServer(numPlayers);
 				server.Start();
 
-				this.Game.ActiveScene = new HostConnectionScene("127.0.0.1", this, ipAddress);
+				var scene = new HostConnectionScene("127.0.0.1", this, ipAddress);
+				if (scene.Initialized)
+				{
+					scene.Prepare();
+				}
+				this.Game.ActiveScene = scene;
+
 			};
 
 			panel.AddChild(txt);
@@ -51,6 +63,12 @@ namespace BiscaNet.Desktop.Scenes
 			panel.AddChild(new Header(ipAddress));
 
 			panel.AddChild(bt);
+
+			this.AddUI(new Button("<-", AnchorPoint.TopLeft, new Vector2(150, 50))).OnClick = () =>
+			 {
+				 this.Game.ActiveScene = this.parent;
+			 };
+
 		}
 	}
 }

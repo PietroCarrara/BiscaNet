@@ -107,11 +107,11 @@ namespace BiscaNet.Desktop.Systems
 					// Points message
 					if (deck.Count < Players.Count)
 					{
-						msg = Players[0].HandCount() + " rodadas restantes!\n";
+						msg = Players[Players.Count - 1].HandCount() + " rodadas restantes!\n";
 					}
 					else
 					{
-						msg = (deck.Count / Players.Count) + 2 + " rodadas restantes!\n";
+						msg = (deck.Count / Players.Count) + 2 - 1 + " rodadas restantes!\n";
 					}
 					int index = 0;
 					foreach (var player in Players)
@@ -129,7 +129,7 @@ namespace BiscaNet.Desktop.Systems
 					var p = Players[currentPlayer];
 					var cardId = p.Connection.PlayCard();
 
-					if (cardId >= 0)
+					if (cardId >= 0 && cardId < 3)
 					{
 						var c = p.PopCard(cardId);
 
@@ -144,6 +144,26 @@ namespace BiscaNet.Desktop.Systems
 						else
 						{
 							Server.GiveTurnTo(Players[currentPlayer].Player.GetID());
+						}
+					}
+					// The player is trying to 
+					// switch the joker
+					else if (cardId >= 3 && cardId < 6)
+					{
+						// Normalize the id
+						cardId -= 3;
+
+						var card = Players[currentPlayer].OnHand[cardId];
+
+						// The bisca
+						if (card.Number == Server.GetJoker().Number)
+						{
+							Players[currentPlayer].PopCard(cardId);
+							Players[currentPlayer].AddCard(Server.GetJoker());
+							Server.SetJoker(card);
+
+							Server.SendChat("Mesa",
+								Players[currentPlayer].Player.GetName() + " trocou o seu " + card.Number + " de " + card.Suit + " pelo coringa!");
 						}
 					}
 					break;
@@ -181,6 +201,7 @@ namespace BiscaNet.Desktop.Systems
 
 					startingPlayer += bestIndex;
 					startingPlayer = startingPlayer % Players.Count;
+					Server.SetStartingPlayer(startingPlayer);
 
 					var newOrder = Players.GetRange(bestIndex, Players.Count - bestIndex);
 					newOrder.AddRange(Players.GetRange(0, bestIndex));
@@ -191,6 +212,8 @@ namespace BiscaNet.Desktop.Systems
 					state = GameState.Distrubution;
 					break;
 				case GameState.EvaluateWinner:
+					Server.Message = "";
+
 					Players = Players.OrderByDescending((c) => c.Points).ToList();
 
 					msg = "Ranking:\n";

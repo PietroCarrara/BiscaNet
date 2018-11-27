@@ -182,6 +182,8 @@ namespace BiscaNet.Desktop.Scenes
 		{
 			base.Initialize();
 
+			Players = Players.OrderBy(p => p.GetID()).ToList();
+
 			GameManager.Init(this);
 
 			foreach (var player in Players)

@@ -30,11 +30,11 @@ namespace BiscaNet.Desktop.Scenes
 
 				if (check.Checkec)
 				{
-					this.Game.ActiveScene = new ServerConfigScene();
+					this.Game.ActiveScene = new ServerConfigScene(this);
 				}
 				else
 				{
-					this.Game.ActiveScene = new ConnectionConfigScene();
+					this.Game.ActiveScene = new ConnectionConfigScene(this);
 				}
 			};
 
